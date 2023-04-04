@@ -22,7 +22,7 @@ import spring.cours.jpa.atelier2.service.ProjetService;
 
 @RestController
 @RequestMapping("/projets")
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("*")
 public class ProjetController {
 	@Autowired
 	ProjetService projetService;
