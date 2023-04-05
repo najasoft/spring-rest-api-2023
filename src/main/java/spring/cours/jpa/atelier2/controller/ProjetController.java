@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import spring.cours.jpa.atelier2.ValidationUtils;
 import spring.cours.jpa.atelier2.model.Projet;
 import spring.cours.jpa.atelier2.model.ProjetDev;
 import spring.cours.jpa.atelier2.model.ProjetRes;
@@ -24,8 +25,16 @@ import spring.cours.jpa.atelier2.service.ProjetService;
 @RequestMapping("/projets")
 @CrossOrigin("*")
 public class ProjetController {
+
 	@Autowired
 	ProjetService projetService;
+
+	private boolean valider(ProjetDev p) {
+		return ValidationUtils.valider(p.getDescription()) && ValidationUtils.validerLangage(p.getLangage());
+	}
+	private boolean valider(Projet p) {
+		return ValidationUtils.valider(p.getDescription());
+	}
 
 	@Operation(description = "Pour obtenir la liste des projets")
 	@GetMapping
@@ -45,37 +54,51 @@ public class ProjetController {
 
 	@PostMapping
 	public Projet ajouterProjet(@RequestBody Projet p) {
+		if (!valider(p))
+			return null;
+		
 		return projetService.ajouterProjet(p);
 	}
 
 	@PostMapping("/dev")
 	public ProjetDev ajouterProjetDev(@RequestBody ProjetDev p) {
+		if (!valider(p))
+			return null;
 		return projetService.ajouterProjetDev(p);
 	}
 
 	@PostMapping("/res")
 	public ProjetRes ajouterProjetRes(@RequestBody ProjetRes p) {
+		if (!valider(p))
+			return null;
 		return projetService.ajouterProjetRes(p);
 	}
 
 	@DeleteMapping("/{id}")
 	public void del(@PathVariable long id) {
+		if (id <11) return;
 		projetService.supprimerProjet(id);
 	}
 
 	@DeleteMapping("/dev/{id}")
 	public void delProjetDev(@PathVariable long id) {
+		if (id <11) return;
 		projetService.supprimerProjet(id);
 	}
 
 	@PutMapping
 	public Projet modifierProjet(@RequestBody Projet projet) {
+		if (projet.getIdProjet() <11) return null;
+		if (!valider(projet))
+			return null;
 		return projetService.modifierProjet(projet);
 	}
-	
 
 	@PutMapping("/dev")
 	public Projet modifierProjetDev(@RequestBody ProjetDev projet) {
+		if (projet.getIdProjet() <11) return null;
+		if (!valider(projet))
+			return null;
 		return projetService.modifierProjet(projet);
 	}
 
