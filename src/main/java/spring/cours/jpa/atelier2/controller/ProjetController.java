@@ -95,11 +95,11 @@ public class ProjetController {
 	}
 
 	@PutMapping("/dev")
-	public Projet modifierProjetDev(@RequestBody ProjetDev projet) {
+	public ProjetDev modifierProjetDev(@RequestBody ProjetDev projet) {
 		if (projet.getIdProjet() <11) return null;
 		if (!valider(projet))
 			return null;
-		return projetService.modifierProjet(projet);
+		return projetService.modifierProjetDev(projet);
 	}
 
 	@GetMapping("/{id}")
