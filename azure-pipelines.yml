@@ -13,7 +13,6 @@ variables:
   productionDirectory: 'C:\site\spring-boot-app'  # Ajustez le chemin selon votre environnement local
 
 steps:
-- checkout: git@github.com:iir-projets/app-livraison-2024.git
 
 - task: Maven@3
   inputs:
