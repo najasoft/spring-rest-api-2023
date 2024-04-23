@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+    - main
+
+pool:
+  name: 'Conitnuous delivery - agent'
+  demands: 
+  - agent.name -equals SURFACELAPTOP5
+
+variables:
+  buildDirectory: 'target'
+  productionDirectory: 'C:\site\spring-boot-app'  # Ajustez le chemin selon votre environnement local
+
+steps:
+- checkout: git@github.com:iir-projets/app-livraison-2024.git
+
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean install'
+    options: '-DskipTests'
+  displayName: 'Build Spring Boot App'
+
+- script: |
+    dir $(Build.SourcesDirectory)\target
+  displayName: 'List Build Directory Contents'
+
+- script: |
+    robocopy $(Build.SourcesDirectory)\$(buildDirectory) $(productionDirectory) /MIR *.jar
+  displayName: 'Deploy Spring Boot App to Production Directory'
+  condition: succeeded()
