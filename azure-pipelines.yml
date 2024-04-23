@@ -7,6 +7,7 @@ pool:
   name: 'Conitnuous delivery - agent'
   demands: 
   - agent.name -equals SURFACELAPTOP5
+  - maven
 
 variables:
   buildDirectory: 'target'
